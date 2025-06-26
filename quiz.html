@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Time 💖</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+      color: #fff;
+    }
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .overlay {
+      position: absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .btn-vintage {
+      margin-top: 20px;
+      padding: 10px 26px;
+      font-family: 'Georgia', serif;
+      font-size: 1.1rem;
+      color: #fff;
+      background: linear-gradient(145deg, #f7bfbf, #ffdcdc);
+      border: 2px solid #d4a373;
+      border-radius: 40px;
+      box-shadow: 0 5px 15px rgba(255,179,171,0.4);
+      transition: all .3s;
+      cursor: pointer;
+    }
+    .btn-vintage:hover {
+      background: linear-gradient(145deg, #ff9e96, #ffc5bc);
+    }
+    .timer {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.8);
+      color: #5a3e36;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      z-index: 10;
+    }
+    .quiz-container {
+      display: none;
+      max-width: 800px;
+      background: rgba(255,255,255,0.9);
+      color: #5a3e36;
+      padding: 30px;
+      border-radius: 15px;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+    .quiz-question h5 {
+      font-weight: bold;
+    }
+    .modal-box, .bonus-box {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff9f0;
+      color: #5a3e36;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      text-align: center;
+      z-index: 1000;
+      display: none;
+      border: 4px double #d4a373;
+    }
+    .flower-img {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+  margin-top: 15px;
+  animation: pop 0.8s ease-in-out;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+    @keyframes pop {
+      0% {transform: scale(0);}
+      100% {transform: scale(1);}
+    }
+    .typing-text {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      font-style: italic;
+    }
+    .music-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #fff9f0;
+  color: #5a3e36;
+  padding: 15px 20px;
+  border: 3px double #d4a373;
+  border-radius: 15px;
+  z-index: 1000;
+  font-family: 'Georgia', serif;
+  box-shadow: 0 5px 15px rgba(213, 163, 115, 0.2);
+  text-align: center;
+}
+
+.music-box h6 {
+  margin: 0 0 10px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.music-controls button {
+  background: #ffe6e1;
+  border: 2px solid #d4a373;
+  border-radius: 50%;
+  margin: 0 5px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.music-controls button:hover {
+  background-color: #ffd2c4;
+}
+
+  </style>
+</head>
+<body>
+
+<video id="bg-video" autoplay loop muted playsinline>
+  <source src="background.mp4" type="video/mp4" />
+</video>
+
+<div class="timer" id="timer">5:00</div>
+
+<div class="overlay" id="start-screen">
+  <h2>Let's see how much you know me well.<br>Answer this quiz to get the next message.</h2>
+  <button class="btn-vintage" onclick="startQuiz()">Okay Baby</button>
+</div>
+
+<div class="container quiz-container" id="quiz">
+  <form id="quiz-form">
+    <!-- Questions -->
+    <div class="quiz-question">
+      <h5>1. What is the date of when our conversation in telegram started?</h5>
+      <input type="radio" name="q1" value="A"/> Jan 30<br>
+      <input type="radio" name="q1" value="B"/> Feb 1<br>
+      <input type="radio" name="q1" value="C"/> Jan 28
+    </div>
+    <div class="quiz-question">
+      <h5>2. When did we watch a movie for the first time?</h5>
+      <input type="radio" name="q2" value="A"/> June 18<br>
+      <input type="radio" name="q2" value="B"/> June 19<br>
+      <input type="radio" name="q2" value="C"/> June 20
+    </div>
+    <div class="quiz-question">
+      <h5>3. How many pets do I have?</h5>
+      <input type="radio" name="q3" value="A"/> 4<br>
+      <input type="radio" name="q3" value="B"/> 2<br>
+      <input type="radio" name="q3" value="C"/> 5
+    </div>
+    <!-- Add 7 more questions similarly -->
+        <div class="quiz-question">
+      <h5>4. When did I write a book for you?</h5>
+      <input type="radio" name="q4" value="A"/> June 8<br>
+      <input type="radio" name="q4" value="B"/> June 10<br>
+      <input type="radio" name="q4" value="C"/> June 6
+    </div>
+      <div class="quiz-question">
+      <h5>5. What was the title?</h5>
+      <input type="radio" name="q5" value="A"/> To Orpheus, With Love<br>
+      <input type="radio" name="q5" value="B"/> To orpheus with love<br>
+      <input type="radio" name="q5" value="C"/> To Orpheus with Love
+    </div>
+      <div class="quiz-question">
+      <h5>6. What's my roblox username HAHAHAHAHA?</h5>
+      <input type="radio" name="q6" value="A"/> Aya031205<br>
+      <input type="radio" name="q6" value="B"/> aya031205<br>
+      <input type="radio" name="q6" value="C"/> AYA031205
+    </div>
+<div class="quiz-question">
+      <h5>7. When did I write my first confession to you?</h5>
+      <input type="radio" name="q7" value="A"/> April 28<br>
+      <input type="radio" name="q7" value="B"/> April 26<br>
+      <input type="radio" name="q7" value="C"/> April 29
+    </div>
+    <div class="quiz-question">
+      <h5>8. First song we actually sang together?</h5>
+      <input type="radio" name="q8" value="A"/> Blue<br>
+      <input type="radio" name="q8" value="B"/> Glue song<br>
+      <input type="radio" name="q8" value="C"/> Both
+    </div>
+    <div class="quiz-question">
+      <h5>9. When did you sketched me?</h5>
+      <input type="radio" name="q9" value="A"/> June 10<br>
+      <input type="radio" name="q9" value="B"/> June 11<br>
+      <input type="radio" name="q9" value="C"/> June 13
+    </div>
+    <div class="quiz-question">
+      <h5>10. First time we made love HAHAHAHAHAHA?</h5>
+      <input type="radio" name="q10" value="A"/> 18TH<br>
+      <input type="radio" name="q10" value="B"/> 16TH<br>
+      <input type="radio" name="q10" value="C"/> 15TH
+    </div>
+    <button class="btn-vintage" type="button" onclick="submitQuiz()">I am done baby</button>
+  </form>
+</div>
+
+<!-- Modals -->
+<div class="modal-box" id="resultModal">
+  <p id="resultText"></p>
+  <button class="btn-vintage" onclick="closeModal('resultModal')">Okay</button>
+</div>
+
+<div class="modal-box" id="bonusModal">
+  <p>You failed to answer it in 10mins... but if you answer this bonus question, you can retake it! Hehehe</p>
+  <p>What’s the password of the book I wrote?</p>
+  <input type="text" id="bonusAnswer" class="form-control" />
+  <button class="btn-vintage" onclick="checkBonus()">Submit Bonus</button>
+</div>
+
+<div class="modal-box" id="finalModal">
+  <p>So now you really know me well eh? HEHEHE great job baby!!!</p>
+  <button class="btn-vintage" onclick="showFlower()">Open me</button>
+</div>
+
+<div class="modal-box" id="flowerBox">
+  <img src="flower.png" class="flower-img" alt="Flower" />
+  <div class="typing-text" id="flowerMessage"></div>
+  <a href="final.html" class="btn-vintage" style="margin-top: 25px; display: inline-block;">Let's go to the final part!</a>
+
+</div>
+<div class="music-box">
+  <h6>Play me 🎵</h6>
+  <audio id="loveAudio" src="Blue.mp3"></audio>
+  <div class="music-controls">
+    <button onclick="document.getElementById('loveAudio').play()">▶️</button>
+    <button onclick="document.getElementById('loveAudio').pause()">⏸️</button>
+    <button onclick="stopAudio()">⏹️</button>
+  </div>
+</div>
+
+<script>
+let timer;
+let timeLeft = 300;
+const correctAnswers = {
+  q1: "A",
+  q2: "C",
+  q3: "B",
+  q4: "C",
+  q5: "A",
+  q6: "A",
+  q7: "B",
+  q8: "A",
+  q9: "B",
+  q10: "C"
+};
+
+function startQuiz() {
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  timer = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  timeLeft--;
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById("timer").textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  if (timeLeft <= 0) {
+    clearInterval(timer);
+    showBonusModal();
+  }
+}
+
+function submitQuiz() {
+  clearInterval(timer);
+  const form = document.getElementById("quiz-form");
+  let score = 0;
+  for (let key in correctAnswers) {
+    const selected = form[key]?.value;
+    if (selected === correctAnswers[key]) {
+      score++;
+    }
+  }
+  if (score >= 8) {
+    document.getElementById("finalModal").style.display = "block";
+  } else {
+    document.getElementById("resultText").textContent = `Nuh uh! Your score is ${score}/10. You need at least 8. Bonus round time!`;
+    document.getElementById("resultModal").style.display = "block";
+    setTimeout(() => showBonusModal(), 1000);
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+function showBonusModal() {
+  document.getElementById("bonusModal").style.display = "block";
+}
+
+function checkBonus() {
+  const answer = document.getElementById("bonusAnswer").value.trim().toLowerCase();
+  if (answer.includes("may26")) {
+    location.reload();
+  } else {
+    alert("Oops! That's not it. Try again or refresh to restart.");
+  }
+}
+
+function showFlower() {
+  document.getElementById("finalModal").style.display = "none";
+  document.getElementById("flowerBox").style.display = "block";
+  typeFlowerMsg();
+}
+
+function typeFlowerMsg() {
+  const msg = `Here—virtual flowers! They never wilt, never die, and come with unlimited hugs from me. I wish I could give you real ones, but for now, this will have to do. Happy 1st again love! `;
+  const target = document.getElementById("flowerMessage");
+  let i = 0;
+  target.innerHTML = "";
+  (function type() {
+    if (i < msg.length) {
+      target.innerHTML += msg.charAt(i++);
+      setTimeout(type, 35);
+    }
+  })();
+}
+function stopAudio() {
+  const audio = document.getElementById('loveAudio');
+  audio.pause();
+  audio.currentTime = 0;
+}
+
+</script>
+</body>
+</html>
